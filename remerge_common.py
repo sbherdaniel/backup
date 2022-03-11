@@ -48,7 +48,11 @@ def get_remerge_column(columns):
     return ', '.join(select_column)
 
 # 최종 쿼리 작성
-def get_remerge_query(select_columns, metric_columns, groupby_columns, owner_id, start_date, end_date):
+def get_remerge_query(select_columns, metric_columns, owner_id, start_date, end_date):
+    columns = REMERGE_SELECT_DATA.values()
+    groupby_columns = ['"' + x + '"' for x in columns]
+    groupby_columns = ', '.join(groupby_columns)
+
     return f"""
         SELECT
                {select_columns},
@@ -61,17 +65,17 @@ def get_remerge_query(select_columns, metric_columns, groupby_columns, owner_id,
         ;
         """
 
-
-# test query print
-if __name__ == '__main__':
-    columns = REMERGE_SELECT_DATA.values()
-    groupby_columns = ['"' + x + '"' for x in columns]
-    groupby_columns = ', '.join(groupby_columns)
-    owner_id = 'innisfree'
-    start_date, end_date = '2022-03-07', '2022-03-07'
-
-    select_columns = get_remerge_column(columns)
-    metric_columns = get_remerge_column(REMERGE_METRIC_DATA + REMERGE_METRIC_NUM_DATA)
-
-    test_query = get_remerge_query(select_columns, metric_columns, groupby_columns, owner_id, start_date, end_date)
-    print(test_query)
+# #test query print
+# if __name__ == '__main__':
+#     columns = REMERGE_SELECT_DATA.values()
+#     groupby_columns = ['"' + x + '"' for x in columns]
+#     groupby_columns = ', '.join(groupby_columns)
+#
+#     owner_id = 'innisfree'
+#     start_date, end_date = '2022-03-07', '2022-03-07'
+#
+#     select_columns = get_remerge_column(columns)
+#     metric_columns = get_remerge_column(REMERGE_METRIC_DATA + REMERGE_METRIC_NUM_DATA)
+#
+#     test_query = get_remerge_query(select_columns, metric_columns, owner_id, start_date, end_date)
+#     print(test_query)
